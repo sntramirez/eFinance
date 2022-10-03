@@ -11,7 +11,7 @@ exports.createAccount = (req, res, next) => {
         name: req.body.name,
         color: req.body.color,
         amount: req.body.amount,
-        category: req.body.category_id,
+        category: req.body.category,
         creator: req.userData.userId ? req.userData.userId : null
     });
     account.save().then(income => {
@@ -37,17 +37,17 @@ exports.createAccount = (req, res, next) => {
 exports.retrieveAccounts = (req, res, next) => {
     const pageSize = + req.query.pageSize;
     const currentPage = + req.query.page;
-    const accountQuery = Account.find();
+    const accountQuery = Account.findByCreator(req.userData.userId);
     let fetchedAccounts;
     if (currentPage && pageSize) {
        accountQuery.skip(pageSize *(currentPage - 1)).limit(pageSize);
     }
    accountQuery.then( documents => {
         fetchedAccounts = documents;
-        return Account.count();
+        return Account.findByCreator(req.userData.userId).count();
     }).then(count => {
         res.status(200).json({
-            accountCategories: fetchedAccounts,
+            accounts: fetchedAccounts,
             maxAccounts: count
         });
     }).catch(err => {

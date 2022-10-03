@@ -36,16 +36,20 @@ exports.createIncome = (req, res, next) => {
  * @param {*} next next
  */
 exports.retrieveIncomes = (req, res, next) => {
+    const today = new Date();
+    const monthBeginning = new Date(today.getFullYear(), today.getMonth(), 1);
+
     const pageSize = + req.query.pageSize;
     const currentPage = + req.query.page;
-    const incomeQuery = Income.find({creator: req.userData.userId});
+    const incomeQuery = Income.find({creator: req.userData.userId,  $lt: monthBeginning});
+    console.log(incomeQuery);
     let fetchedIncomes;
     if (currentPage && pageSize) {
         incomeQuery.skip(pageSize *(currentPage - 1)).limit(pageSize);
     }
     incomeQuery.then( documents => {
         fetchedIncomes = documents;
-        return Income.count();
+        return Income.find({creator: req.userData.userId,  $lt: monthBeginning}).count();
     }).then(count => {
         res.status(200).json({
             incomes: fetchedIncomes,

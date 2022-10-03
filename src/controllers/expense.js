@@ -30,26 +30,31 @@ exports.createExpense= (req, res, next) => {
 };
 
 /**
- * Retrieves incomes
+ * Retrieves expenses since the beginning of the month
  * @param {*} req request
  * @param {*} res response
  * @param {*} next next
  */
 exports.retrieveExpenses = (req, res, next) => {
+    const today = new Date();
+    const monthBeginning = new Date(today.getFullYear(), today.getMonth(), 1);
+
     const pageSize = + req.query.pageSize;
     const currentPage = + req.query.page;
-    const expenseQuery = Expense.find({creator: req.userData.userId});
+    const expenseQuery = Expense.find({creator: req.userData.userId, $lt: monthBeginning});
+    console.log(expenseQuery);
     let fetchedExpenses;
     if (currentPage && pageSize) {
         expenseQuery.skip(pageSize *(currentPage - 1)).limit(pageSize);
     }
     expenseQuery.then( documents => {
         fetchedExpenses = documents;
-        return Expense.count();
+        return Expense.find({creator: req.userData.userId, $lt: monthBeginning}).count();
     }).then(count => {
         res.status(200).json({
             expenses: fetchedExpenses,
-            maxExpenses: count
+            maxExpenses: count,
+            since: monthBeginning
         });
     }).catch(err => {
         res.status(500).json({

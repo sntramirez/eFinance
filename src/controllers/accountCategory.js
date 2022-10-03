@@ -37,14 +37,14 @@ exports.createAccountCategory = (req, res, next) => {
 exports.retrieveAccountCategories = (req, res, next) => {
     const pageSize = + req.query.pageSize;
     const currentPage = + req.query.page;
-    const accountCategoryQuery = AccountCategory.find();
+    const accountCategoryQuery = AccountCategory.findDefaultAndCustom();
     let fetchedAccountCategories;
     if (currentPage && pageSize) {
         accountCategoryQuery.skip(pageSize *(currentPage - 1)).limit(pageSize);
     }
     accountCategoryQuery.then( documents => {
         fetchedAccountCategories = documents;
-        return AccountCategory.count();
+        return AccountCategory.findDefaultAndCustom().count();
     }).then(count => {
         res.status(200).json({
             accountCategories: fetchedAccountCategories,
