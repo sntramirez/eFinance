@@ -39,7 +39,7 @@ app.use('/images', express.static(path.join("backend/images")));
 /**
  * Adding routes
  */
-app.use('/api/user', userRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/accountcategories', accountCategoriesRouter);
 app.use('/api/accounts', accountsRouter);
 app.use('/api/expensecategories', expenseCategoriesRouter);
