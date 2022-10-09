@@ -7,15 +7,15 @@ const Expense = require('../models/expense');
  * @param {*} next 
  */
 exports.createExpense= (req, res, next) => {
-    // const url = req.protocol + "://" + req.get("host"); 
     const expense = new Expense({
         title: req.body.title,
         description: req.body.description,
         amount: req.body.amount,
-        category: req.body.category_id,
+        category: req.body.category,
+        account: req.body.account,
         creator: req.userData.userId
     });
-    expense.save().then(income => {
+    expense.save().then(expense => {
         res.status(201).json({
             expense: {
                 ... expense,
@@ -42,7 +42,6 @@ exports.retrieveExpenses = (req, res, next) => {
     const pageSize = + req.query.pageSize;
     const currentPage = + req.query.page;
     const expenseQuery = Expense.find({creator: req.userData.userId, $lt: monthBeginning});
-    console.log(expenseQuery);
     let fetchedExpenses;
     if (currentPage && pageSize) {
         expenseQuery.skip(pageSize *(currentPage - 1)).limit(pageSize);

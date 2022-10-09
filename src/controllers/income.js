@@ -12,8 +12,9 @@ exports.createIncome = (req, res, next) => {
         title: req.body.title,
         description: req.body.description,
         amount: req.body.amount,
-        category: req.body.category_id,
-        creator: req.userData.userId
+        category: req.body.category,
+        account: req.body.account,
+        creator: req.userData.userId,
     });
     income.save().then(income => {
         res.status(201).json({

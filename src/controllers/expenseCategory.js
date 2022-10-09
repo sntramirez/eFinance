@@ -47,7 +47,7 @@ exports.retrieveExpenseCategories = (req, res, next) => {
     }).then(count => {
         res.status(200).json({
             expenseCategories: fetchedExpenseCategories,
-            maxAccountCategories: count
+            maxExpenseCategories: count
         });
     }).catch(err => {
         res.status(500).json({

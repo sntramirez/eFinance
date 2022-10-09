@@ -10,6 +10,9 @@ const expenseCategoriesRouter = require('./routes/expenseCategories');
 const expenseRouter = require('./routes/expenses');
 const incomeCategoriesRouter = require('./routes/incomeCategories');
 const incomeRouter = require('./routes/incomes');
+const reportRouter = require('./routes/report');
+const estimationCategoriesRouter = require('./routes/estimationCategory');
+const estimationsRouter = require('./routes/estimations');
 
 const app = express();
 
@@ -46,5 +49,8 @@ app.use('/api/expensecategories', expenseCategoriesRouter);
 app.use('/api/expenses', expenseRouter);
 app.use('/api/incomecategories', incomeCategoriesRouter);
 app.use('/api/incomes', incomeRouter);
+app.use('/api/reports', reportRouter);
+app.use('/api/estimationCategories', estimationCategoriesRouter);
+app.use('/api/estimations', estimationsRouter);
 
 module.exports = app;
