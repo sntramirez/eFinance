@@ -43,7 +43,7 @@ exports.createUser =  (req, res, next) => {
     User.findOne({ email: req.body.email }).then(user => {
       if(!user){
         return res.status(401).json({
-          message: "User " + req.body.email + "does not exist!"
+          message: "User " + req.body.email + " does not exist!"
         });
       }
       fetchUser = user;
