@@ -19,10 +19,10 @@ exports.createUser =  (req, res, next) => {
       });
       user.save().then(result => {
           res.status(201).json({
-            message: "User hase been created",
+            message: "User has been created",
             result: result
           });
-      }).catch().then( err => {
+      }).catch(err => {
           res.status(500).json({
               error: err,
               message: "Unable to create user, invalid credentials!"
