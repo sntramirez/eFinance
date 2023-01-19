@@ -38,10 +38,18 @@ exports.createExpense= (req, res, next) => {
 exports.retrieveExpenses = (req, res, next) => {
     const today = new Date();
     const monthBeginning = new Date(today.getFullYear(), today.getMonth(), 1);
+    const fieldSort = req.query.sort;
+    let arraySort=(fieldSort != undefined ? fieldSort : "").split("~");
+    let sortJson={};
+    arraySort.forEach(e=>{
+        let arrayPrmSort=e.split("-");
+        let sortType = arrayPrmSort[1] == "asc" ? 1:-1;
+        sortJson[arrayPrmSort[0]] = sortType;
+    });
 
     const pageSize = + req.query.pageSize;
     const currentPage = + req.query.page;
-    const expenseQuery = Expense.find({creator: req.userData.userId, $lt: monthBeginning});
+    const expenseQuery = Expense.find({creator: req.userData.userId, $lt: monthBeginning}).sort(sortJson);
     let fetchedExpenses;
     if (currentPage && pageSize) {
         expenseQuery.skip(pageSize *(currentPage - 1)).limit(pageSize);
